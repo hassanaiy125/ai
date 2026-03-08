@@ -1,0 +1,5 @@
+{
+  "name": "AI Video Gen",
+  "description": "Generate high-quality AI videos from text with custom voice and scenes.",
+  "requestFramePermissions": []
+}
