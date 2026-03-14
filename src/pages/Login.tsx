@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { LogIn, AlertCircle } from 'lucide-react';
 
 export function Login() {
-  const { signInWithGoogle, user } = useAuth();
+  const { signInWithGoogle, user, deviceError } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [error, setError] = React.useState('');
@@ -16,6 +16,12 @@ export function Login() {
       navigate('/dashboard');
     }
   }, [user, navigate]);
+
+  React.useEffect(() => {
+    if (deviceError) {
+      setError(deviceError);
+    }
+  }, [deviceError]);
 
   const handleLogin = async () => {
     try {

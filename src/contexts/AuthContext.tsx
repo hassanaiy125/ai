@@ -5,6 +5,7 @@ import { auth } from '../lib/firebase';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  deviceError: string | null;
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -14,16 +15,37 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [deviceError, setDeviceError] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        // Check for device restriction
+        const registeredUid = localStorage.getItem('veogen_registered_uid');
+        
+        if (registeredUid && registeredUid !== firebaseUser.uid) {
+          // Device is already registered to another account
+          await signOut(auth);
+          setDeviceError('This device is already registered to another account. Multiple accounts per device are not allowed.');
+          setUser(null);
+        } else {
+          // Register this device to the current user
+          if (!registeredUid) {
+            localStorage.setItem('veogen_registered_uid', firebaseUser.uid);
+          }
+          setDeviceError(null);
+          setUser(firebaseUser);
+        }
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
   const signInWithGoogle = async () => {
+    setDeviceError(null);
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
@@ -43,7 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, loading, deviceError, signInWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );
