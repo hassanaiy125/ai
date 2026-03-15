@@ -52,12 +52,34 @@ export function CreateImage() {
   };
 
   const handleGenerateImage = async (isRetry = false) => {
-    if (!prompt.trim()) return;
+    if (!prompt.trim() || !user) return;
+    
+    // Check limits
+    const usageKey = `veogen_image_usage_${user.uid}`;
+    const currentUsage = parseInt(localStorage.getItem(usageKey) || '0', 10);
+    
+    // Assuming default Starter plan (3 images limit)
+    // In a real app, you would check the user's actual subscription tier from a database
+    const userPlan = 'starter'; // 'starter', 'popular', 'pro'
+    const limits = {
+      starter: 3,
+      popular: 100,
+      pro: Infinity
+    };
+    
+    if (currentUsage >= limits[userPlan as keyof typeof limits]) {
+      setError(t('image.limitReached'));
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
       const url = await generateImage(prompt, uploadedImage || undefined);
       setImageUrl(url);
+      
+      // Increment usage
+      localStorage.setItem(usageKey, (currentUsage + 1).toString());
     } catch (err: any) {
       console.error(err);
       const errorMessage = err.message || '';
@@ -90,7 +112,7 @@ export function CreateImage() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-12"
       >
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent leading-normal pb-2">
           {t('image.title')}
         </h1>
         <p className="text-gray-400">{t('image.subtitle')}</p>

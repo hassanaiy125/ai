@@ -15,6 +15,7 @@ export function Pricing() {
       desc: t('pricing.starter.desc'),
       features: [
         t('pricing.feature.v2'),
+        t('pricing.feature.img3'),
         t('pricing.feature.720p'),
         t('pricing.feature.standardVoices'),
         t('pricing.feature.communitySupport')
@@ -30,6 +31,7 @@ export function Pricing() {
       desc: t('pricing.popular.desc'),
       features: [
         t('pricing.feature.v50'),
+        t('pricing.feature.img100'),
         t('pricing.feature.1080p'),
         t('pricing.feature.premiumVoices'),
         t('pricing.feature.prioritySupport')
@@ -45,6 +47,7 @@ export function Pricing() {
       desc: t('pricing.pro.desc'),
       features: [
         t('pricing.feature.unlimited'),
+        t('pricing.feature.imgUnlimited'),
         t('pricing.feature.4k'),
         t('pricing.feature.allVoices'),
         t('pricing.feature.247Support'),
@@ -74,7 +77,7 @@ export function Pricing() {
   return (
     <div className="py-20 px-4">
       <div className="text-center mb-16">
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent leading-normal pb-2">
           {t('pricing.title')}
         </h1>
         <p className="text-gray-400 text-lg">{t('pricing.subtitle')}</p>

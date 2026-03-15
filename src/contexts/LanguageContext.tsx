@@ -96,6 +96,10 @@ export const translations = {
     'pricing.feature.apiAccess': 'API access',
     'pricing.feature.accountManager': 'Dedicated account manager',
     'pricing.feature.sso': 'SSO integration',
+    'pricing.feature.img3': '3 free images',
+    'pricing.feature.img100': '100 images per month',
+    'pricing.feature.imgUnlimited': 'Unlimited images',
+    'image.limitReached': 'You have reached your free image limit. Please upgrade to continue.',
     'common.loading': 'Loading...',
     'common.error': 'Error',
     'common.signInRequired': 'Sign in required',
@@ -186,6 +190,10 @@ export const translations = {
     'pricing.feature.apiAccess': 'وصول للواجهة البرمجية (API)',
     'pricing.feature.accountManager': 'مدير حساب مخصص',
     'pricing.feature.sso': 'تكامل SSO',
+    'pricing.feature.img3': '3 صور مجانية',
+    'pricing.feature.img100': '100 صورة شهرياً',
+    'pricing.feature.imgUnlimited': 'صور غير محدودة',
+    'image.limitReached': 'لقد وصلت إلى الحد الأقصى للصور المجانية. يرجى الترقية للاستمرار.',
     'common.loading': 'جاري التحميل...',
     'common.error': 'خطأ',
     'common.signInRequired': 'تسجيل الدخول مطلوب',
@@ -195,7 +203,7 @@ export const translations = {
 };
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>('ar');
 
   const t = (key: string) => {
     return translations[language][key as keyof typeof translations['en']] || key;
